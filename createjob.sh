@@ -54,8 +54,11 @@ echo "Creating job ${jenkins_job_name}"
 java -jar jenkins-cli.jar -s ${jenkins_url} create-job ${jenkins_job_name} < template.xml --username ${jenkins_username} --password ${jenkins_password} 
 [[ $? -eq 0 ]] && echo "The jenkins Job ${jenkins_job_name} created" || echo "The job ${jenkins_job_name} failed ... check jenkins log for details"
 
+# To gain proper permission let us do a jenkins cli login
+java -jar jenkins-cli.jar -s ${jenkins_url} who-am-i --username ${jenkins_username} --password ${jenkins_password}
+
 # Add job to a specific view
 if [ $jenkins_add_job_to_view = true ]; then
-java -jar jenkins-cli.jar -s ${jenkins_url} add-job-to-view ${jenkins_view} ${jenkins_job_name} --username ${jenkins_username} --password ${jenkins_password}
-[[ $? -eq 0 ]] && echo "Job ${jenkins_job_name} added to view ${jenkins_view}" || echo "The job ${jenkins_job_name} could not be added to  ${jenkins_view}"
+	java -jar jenkins-cli.jar -s ${jenkins_url} add-job-to-view ${jenkins_view} ${jenkins_job_name} --username ${jenkins_username} --password ${jenkins_password}
+	[[ $? -eq 0 ]] && echo "Job ${jenkins_job_name} added to view ${jenkins_view}" || echo "The job ${jenkins_job_name} could not be added to  ${jenkins_view}"
 fi
